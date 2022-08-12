@@ -1,6 +1,80 @@
 .App {
+  background-color: #0B0420;
+  width: 100vw;
+  height:100vh;
+}
+
+.Email {
+  position: relative;
+  background-color: #f1eeee;
+  width:90%;
+  margin:auto;
+  margin-top: 5%;
+  border-radius: 5px;
+  border: 2px solid rgb(131, 131, 131);
+}
+
+.From, .To, .Subject{
+  width:auto;
+  margin:5px;
+  font-weight: bold;
+}
+
+.FromContent, .ToContent, .SubjectContent{
+  margin-left: 5px;
+}
+
+.Body{
+  position:relative;
+  margin: auto;
+  border-radius: 5px;
+  border: 2px solid rgb(131, 131, 131);
+  width: 90%;
+  display:flex;
+  flex-direction: column;
+  word-wrap: break-word;
+}
+
+.BottomArea{
+  position: relative;
+  align-items: center;
+  border: 2px solid black;
+  margin:auto;
+  width:fit-content;
+}
+
+.LeftButton, .RightButton{
+  position: relative;
+  display:inline-block;
+  margin:10px;
+}
+
+.LoginForm{
   position:absolute;
-  background-color: #F2F1F1;
-  width: 100%;
-  height:100%;
+  background-color: #cfcfcf;
+  top:30%;
+  left: 30%;
+  width: 40%;
+  text-align: center;
+  border: 2px solid black;
+}
+
+.SubmitBtn{
+  margin:5px;
+}
+
+.EmailForm{
+  margin:5px;
+  resize: none;
+  width: 80%;
+  height: auto;
+}
+
+.LoginText{
+  font-weight: 600;
+  margin:5px;
+}
+
+.Intro{
+  color:whitesmoke;
 }
