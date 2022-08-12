@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import './App.css';
 import BottomArea from './BottomArea';
 import Button from './Button';
@@ -7,62 +7,121 @@ import Introduction from './Introduction';
 import Login from './Login/Login';
 
 function App() {
-  
-  const[logged, setLogged] = useState(false);
 
-  const[loaded, setLoaded] = useState(false);
+  const [logged, setLogged] = useState(false);
 
-  const[user, setUser] = useState();
+  const [user, setUser] = useState();
 
-  const[selectedEmlIdx, setSelectedEmlIdx] = useState(0);
+  const [selectedEmlIdx, setSelectedEmlIdx] = useState(0);
 
   const [allEmails, setAllEmails] = useState([])
-  
+
   const emptyEmails = () => {
     setAllEmails([]);
-    setLoaded(false);
   }
 
   const getEmails = (userMail) => {
     emptyEmails();
     fetch(`http://localhost:8080/api/emails/${userMail}`)
-    .then((response) => response.json())
-    .then((data) => processJSONEmails(data))
-    .catch(() => alert("Nessuna mail trovata nel DB"));
+      .then((response) => response.json())
+      .then((data) => setAllEmails(
+        data.map(el => ({
+          id: el.id,
+          from: el.f_email,
+          subj: el.subj,
+          fk_target: el.fk_target,
+          content: el.content
+        }))
+      ))
+      .catch(() => alert("Nessuna mail trovata nel DB"));
   }
 
   const processJSONEmails = (data) => {
-    setLoaded(true);
-    data.forEach(el => {
-      console.log(el);
-      setAllEmails(arr => [...arr, {id: el.id, subj: el.subj, fk_target:el.fk_target, content:el.content}]);
-    });    
+
+    setAllEmails(
+      data.map(el => ({
+        id: el.id,
+        f_email: el.f_email,
+        subj: el.subj,
+        fk_target: el.fk_target,
+        content: el.content
+      }))
+    );
+    /*
+  var arr = [];
+  data.forEach(el => {
+    console.log(el);
+    arr = [...arr, {id: el.id, subj: el.subj, fk_target:el.fk_target, content:el.content}];
+  });  
+  console.log(arr)
+  setAllEmails(arr);  */
   }
 
   const initialize = (userData) => {
     setUser(userData);
-    setLogged(true);
     getEmails(userData.email);
+    setLogged(true);
   }
 
-  const increaseIdx = () =>{
-    if(selectedEmlIdx<allEmails.length-1){
-      setSelectedEmlIdx(idx => idx+1);
-    }
+
+  const increaseIdx = () => {
+    if (selectedEmlIdx >= allEmails.length - 1) return
+    
+    setSelectedEmlIdx(idx => idx + 1);
   }
 
-  const decreaseIdx = () =>{
-    if(selectedEmlIdx>0){
-      setSelectedEmlIdx(idx => idx-1);
-    }
+  const decreaseIdx = () => {
+    if (selectedEmlIdx <= 0) return
+
+    setSelectedEmlIdx(idx => idx - 1);
   }
+
+  const evalLegit = () => {
+    fetch(`http://localhost:8080/api/eval`, {
+      method: 'POST',
+      headers:{ 'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        FK_email:user.email,
+        FK_id: allEmails[selectedEmlIdx].id,
+        isEvalPhish: false
+      })
+    }).then((response) => response.json())
+    .then((data)=> {console.log("Success: ", data)})
+    .catch(alert("Errore nel caricamento"));
+  }
+
+  const evalPhish = () => {
+    fetch(`http://localhost:8080/api/eval`, {
+      method: 'POST',
+      headers:{ 'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        FK_email:user.email,
+        FK_id: allEmails[selectedEmlIdx].id,
+        isEvalPhish: true
+      })
+    }).then((response) => response.json())
+    .then((data)=> {console.log("Success: ", data)})
+    .catch(alert("Errore nel caricamento"));
+  }
+
+  console.log(">>>>>>>>>>>>>")
+  console.log({
+    hasEmails: !!allEmails.length,
+    allEmails,
+    selectedEmlIdx,
+  })
+  console.log("<<<<<<<<<<<<<")
 
   return (
     <div className="App">
-      {!logged && !loaded && <Login loginFunc={initialize}/>}
-      {logged && <Introduction/>}
-      {loaded  && <Email email={allEmails[selectedEmlIdx]}/>}
-      {loaded  && <BottomArea leftBtnClick={decreaseIdx} rightBtnClick={increaseIdx}/>}
+      {!logged && <Login loginFunc={initialize} />}
+      {!!allEmails.length && logged &&
+        (<React.Fragment>
+          <Introduction />
+          <Email email={allEmails[selectedEmlIdx]} />
+          <BottomArea leftBtnClick={decreaseIdx} rightBtnClick={increaseIdx} />
+        </React.Fragment>)
+      }
     </div>
   );
 }

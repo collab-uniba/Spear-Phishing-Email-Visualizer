@@ -8,9 +8,9 @@ const Email = (props) => {
   return (
     <div className="Email">
         <From from={props.email.from}/>
-        <To to={props.email.to}/>
-        <Subject subject={props.email.subject}/>
-        <Body html={`${props.email.html}`}/>
+        <To to={props.email.fk_target}/>
+        <Subject subject={props.email.subj}/>
+        <Body html={`${props.email.content}`}/>
     </div>
   )
 }
