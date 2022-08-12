@@ -81,3 +81,18 @@
   text-align: center;
   padding:5px;
 }
+
+.FinalMess{
+  background-color: #0B0420;
+  width: 100vw;
+  height:100vh;
+}
+
+.Center{
+  top:50%;
+  position: relative;
+  text-align: center;
+  color: whitesmoke;
+  font-size: 30;
+  font-weight: 800;
+}

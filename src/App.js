@@ -3,6 +3,7 @@ import './App.css';
 import BottomArea from './BottomArea';
 import Button from './Button';
 import Email from './Email';
+import FinalMessage from './FinalMessage';
 import Introduction from './Introduction';
 import Login from './Login/Login';
 
@@ -15,6 +16,8 @@ function App() {
   const [selectedEmlIdx, setSelectedEmlIdx] = useState(0);
 
   const [allEmails, setAllEmails] = useState([])
+
+  const [finished, setFinished] = useState(false);
 
   const emptyEmails = () => {
     setAllEmails([]);
@@ -36,27 +39,6 @@ function App() {
       .catch(() => alert("Nessuna mail trovata nel DB"));
   }
 
-  const processJSONEmails = (data) => {
-
-    setAllEmails(
-      data.map(el => ({
-        id: el.id,
-        f_email: el.f_email,
-        subj: el.subj,
-        fk_target: el.fk_target,
-        content: el.content
-      }))
-    );
-    /*
-  var arr = [];
-  data.forEach(el => {
-    console.log(el);
-    arr = [...arr, {id: el.id, subj: el.subj, fk_target:el.fk_target, content:el.content}];
-  });  
-  console.log(arr)
-  setAllEmails(arr);  */
-  }
-
   const initialize = (userData) => {
     setUser(userData);
     getEmails(userData.email);
@@ -65,7 +47,10 @@ function App() {
 
 
   const increaseIdx = () => {
-    if (selectedEmlIdx >= allEmails.length - 1) return
+    if (selectedEmlIdx >= allEmails.length - 1){
+      setFinished(true);
+      return
+    } 
     
     setSelectedEmlIdx(idx => idx + 1);
   }
@@ -81,13 +66,13 @@ function App() {
       method: 'POST',
       headers:{ 'Content-Type': 'application/json'},
       body: JSON.stringify({
-        FK_email:user.email,
-        FK_id: allEmails[selectedEmlIdx].id,
-        isEvalPhish: false
+        fk_email:user.email,
+        fk_id: allEmails[selectedEmlIdx].id,
+        evalPhish: false
       })
     }).then((response) => response.json())
     .then((data)=> {console.log("Success: ", data)})
-    .catch(alert("Errore nel caricamento"));
+    .catch(err => console.log("Errore nel caricamento: ", err));
   }
 
   const evalPhish = () => {
@@ -95,13 +80,23 @@ function App() {
       method: 'POST',
       headers:{ 'Content-Type': 'application/json'},
       body: JSON.stringify({
-        FK_email:user.email,
-        FK_id: allEmails[selectedEmlIdx].id,
-        isEvalPhish: true
+        fk_email:user.email,
+        fk_id: allEmails[selectedEmlIdx].id,
+        evalPhish: true
       })
     }).then((response) => response.json())
     .then((data)=> {console.log("Success: ", data)})
-    .catch(alert("Errore nel caricamento"));
+    .catch(err => console.log("Errore nel caricamento: ", err));
+  }
+
+  const leftClick = () => {
+    evalLegit();
+    increaseIdx();
+  }
+
+  const rightClick = () => {
+    evalPhish();
+    increaseIdx();
   }
 
   console.log(">>>>>>>>>>>>>")
@@ -115,13 +110,16 @@ function App() {
   return (
     <div className="App">
       {!logged && <Login loginFunc={initialize} />}
-      {!!allEmails.length && logged &&
+      {!!allEmails.length && logged && !finished &&
         (<React.Fragment>
           <Introduction />
           <Email email={allEmails[selectedEmlIdx]} />
-          <BottomArea leftBtnClick={decreaseIdx} rightBtnClick={increaseIdx} />
+          <BottomArea leftBtnClick={leftClick} rightBtnClick={rightClick} />
+          <Button text="Go Back" onClickFunc={decreaseIdx}/>
+          <Button text="Go Ahead" onClickFunc={increaseIdx}/>
         </React.Fragment>)
       }
+      {finished && <FinalMessage/>}
     </div>
   );
 }

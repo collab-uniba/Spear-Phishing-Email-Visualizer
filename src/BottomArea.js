@@ -5,10 +5,10 @@ const BottomArea = (props) => {
   return (
     <div className='BottomArea'>
         <span className="LeftButton">
-            <Button text="Precedente" onClickFunc={props.leftBtnClick}/> 
+            <Button text="Legittima" onClickFunc={props.leftBtnClick}/> 
         </span>
         <span className="RightButton">
-            <Button text="Successiva" onClickFunc={props.rightBtnClick}/> 
+            <Button text="Phishing" onClickFunc={props.rightBtnClick}/> 
         </span>
     </div>
   )
