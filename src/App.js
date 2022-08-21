@@ -6,6 +6,7 @@ import Email from './Email';
 import FinalMessage from './FinalMessage';
 import Introduction from './Introduction';
 import Login from './Login/Login';
+import TestHandler from './Test/TestHandler';
 
 function App() {
 
@@ -18,6 +19,8 @@ function App() {
   const [allEmails, setAllEmails] = useState([])
 
   const [finished, setFinished] = useState(false);
+
+  const [end, setEnd] = useState(false);
 
   const emptyEmails = () => {
     setAllEmails([]);
@@ -99,27 +102,35 @@ function App() {
     increaseIdx();
   }
 
+  
   console.log(">>>>>>>>>>>>>")
   console.log({
     hasEmails: !!allEmails.length,
     allEmails,
     selectedEmlIdx,
+    end
   })
   console.log("<<<<<<<<<<<<<")
 
   return (
     <div className="App">
       {!logged && <Login loginFunc={initialize} />}
-      {!!allEmails.length && logged && !finished &&
+      {!!allEmails.length && logged && !finished && !end &&
         (<React.Fragment>
           <Introduction />
-          <Email email={allEmails[selectedEmlIdx]} />
+          <Email email={allEmails[selectedEmlIdx]} uEM={user.email} />
           <BottomArea leftBtnClick={leftClick} rightBtnClick={rightClick} />
           <Button text="Go Back" onClickFunc={decreaseIdx}/>
           <Button text="Go Ahead" onClickFunc={increaseIdx}/>
         </React.Fragment>)
       }
-      {finished && <FinalMessage/>}
+      {finished && !end &&
+      (<React.Fragment>
+        <TestHandler user={user.email} finish={() => setEnd(true)}/>
+      </React.Fragment>)}
+        { end && 
+          <FinalMessage/>
+        }
     </div>
   );
 }

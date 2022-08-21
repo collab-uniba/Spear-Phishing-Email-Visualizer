@@ -7,7 +7,7 @@ const FinalMessage = () => {
             Test Concluso.
         </div>
         <div className="Center">
-            Grazie per aver partecipato
+            Grazie per aver partecipato.
         </div>
     </div>
   )
