@@ -30,21 +30,37 @@ function App() {
     emptyEmails();
     fetch(`http://localhost:8080/api/emails/${userMail}`)
       .then((response) => response.json())
-      .then((data) => setAllEmails(
+      .then((data) => setAllEmails(shuffle(
         data.map(el => ({
           id: el.id,
           from: el.f_email,
           subj: el.subj,
           fk_target: el.fk_target,
           content: el.content
-        }))
+        })))
       ))
       .catch(() => alert("Nessuna mail trovata nel DB"));
+  }
+
+  const shuffle = (arr) => {
+    var array = arr;
+    
+    for(let i = array.length -1; i>0; i--){
+      const j = Math.floor(Math.random() * (i+1));
+      const temp = array[i];
+      array[i] = array[j];
+      array[j] = temp;
+    }
+
+    console.log(array);
+
+    return array;
   }
 
   const initialize = (userData) => {
     setUser(userData);
     getEmails(userData.email);
+    setAllEmails(shuffle(allEmails));
     setLogged(true);
   }
 
@@ -101,7 +117,6 @@ function App() {
     evalPhish();
     increaseIdx();
   }
-
   
   console.log(">>>>>>>>>>>>>")
   console.log({
