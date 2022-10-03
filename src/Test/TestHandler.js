@@ -63,8 +63,9 @@ const TestHandler = (props) => {
             alert("Rispondi a tutte le domande!")
             return
         }
-        fetch(`http://localhost:8080/api/BF`, {
+        fetch(`https://phishing-server-uniba-pasquale.loca.lt/api/BF`, {
             method: 'POST',
+            mode:'cors',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 u_email: props.user,
@@ -98,7 +99,7 @@ const TestHandler = (props) => {
     console.log("<<<<<<<<<<<<<")
     return (
         <div className='QueryDiv'>
-            <div className='QueryInstruction'>Rispondi con sincerità alle venti (20) domande qui sotto indicando quanto le frasi ti descrivono.</div>
+            <div className='QueryInstruction'>Rispondi con sincerità alle venti (20) domande qui sotto indicando quanto le seguenti frasi ti descrivono.</div>
             <PositiveQ query="Sono l'anima della festa" id={1} posFunc={addE} negFunc={remE} req={() => setCount(count + 1)} />
             <PositiveQ query="Empatizzo con le emozioni degli altri" id={2} posFunc={addA} negFunc={remA} req={() => setCount(count + 1)} />
             <PositiveQ query="Appena ricevo un ordine lo eseguo subito" id={3} posFunc={addC} negFunc={remC} req={() => setCount(count + 1)} />

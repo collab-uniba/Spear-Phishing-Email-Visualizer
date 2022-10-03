@@ -53,10 +53,10 @@
 .LoginForm{
   position:absolute;
   background-color: #cfcfcf;
-  top:30%;
-  left: 30%;
-  width: 40%;
-  text-align: center;
+  padding: 4px;
+  top:5%;
+  left: 20%;
+  width: 60%;
   border: 2px solid black;
 }
 
@@ -72,6 +72,7 @@
 }
 
 .LoginText{
+  text-align: center;
   font-weight: 600;
   margin:5px;
 }

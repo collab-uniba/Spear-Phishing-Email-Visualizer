@@ -28,7 +28,10 @@ function App() {
 
   const getEmails = (userMail) => {
     emptyEmails();
-    fetch(`http://localhost:8080/api/emails/${userMail}`)
+    fetch(`https://phishing-server-uniba-pasquale.loca.lt/api/emails/${userMail}`, 
+    {
+      method:'GET',
+    mode:'cors'})
       .then((response) => response.json())
       .then((data) => setAllEmails(shuffle(
         data.map(el => ({
@@ -81,8 +84,9 @@ function App() {
   }
 
   const evalLegit = () => {
-    fetch(`http://localhost:8080/api/eval`, {
+    fetch(`https://phishing-server-uniba-pasquale.loca.lt/api/eval`, {
       method: 'POST',
+      mode:'cors',
       headers:{ 'Content-Type': 'application/json'},
       body: JSON.stringify({
         fk_email:user.email,
@@ -95,8 +99,9 @@ function App() {
   }
 
   const evalPhish = () => {
-    fetch(`http://localhost:8080/api/eval`, {
+    fetch(`https://phishing-server-uniba-pasquale.loca.lt/api/eval`, {
       method: 'POST',
+      mode:'cors',
       headers:{ 'Content-Type': 'application/json'},
       body: JSON.stringify({
         fk_email:user.email,
@@ -127,6 +132,9 @@ function App() {
   })
   console.log("<<<<<<<<<<<<<")
 
+  //<Button text="Go Back" onClickFunc={decreaseIdx}/>
+  //<Button text="Go Ahead" onClickFunc={increaseIdx}/> 
+
   return (
     <div className="App">
       {!logged && <Login loginFunc={initialize} />}
@@ -134,9 +142,7 @@ function App() {
         (<React.Fragment>
           <Introduction />
           <Email email={allEmails[selectedEmlIdx]} uEM={user.email} />
-          <BottomArea leftBtnClick={leftClick} rightBtnClick={rightClick} />
-          <Button text="Go Back" onClickFunc={decreaseIdx}/>
-          <Button text="Go Ahead" onClickFunc={increaseIdx}/>
+          <BottomArea leftBtnClick={leftClick} rightBtnClick={rightClick} /> 
         </React.Fragment>)
       }
       {finished && !end &&
