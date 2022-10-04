@@ -9,6 +9,7 @@ const Login = (props) => {
 
     const [userEmail, setUserEmail] = useState("")
 
+    // REGEX PER VALIDARE LE EMAIL
     var validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
     const validateRegexEmail = (email) => {
@@ -16,13 +17,14 @@ const Login = (props) => {
     }
 
     const processUser = (email) => {
-        // Fetch user
+        // PRENDE LE INFORMAZIONI UTENTI DAL DB
         fetch(`https://phishing-server-uniba-pasquale.loca.lt/api/users/${email}`, {mode:'cors'})
             .then((response) => response.json())
             .then((data) => props.loginFunc(data))
-            .catch(() => alert("Email non trovata nel DB"));
+            .catch(() => alert("Problema nel login: email non trovata o server irragiungibile"));
     }
 
+        // Funzione che fa partire il test
     const startTest = () => {
         if (validateRegexEmail(userEmail)) {
             processUser(userEmail);
@@ -38,7 +40,7 @@ const Login = (props) => {
                 <p>Ciao! Benvenuto nel test di phishing!</p>
                 <p>Se sei qui vuol dire che hai già compilato il modulo google</p>
                 <p>Prima di iniziare il test, leggi bene i punti qui sotto. Se qualcosa non ti è chiaro, contatta Pasquale Monniello a: 3890238622 </p>
-                <p><b>Un ultimo passo prima di iniziare</b>, apri <a target="_blank" href="https://phishing-server-uniba-pasquale.loca.lt">questo link</a> e clicca sul tasto blu <b>Click to Continue</b>. Non ti preoccupare dell'errore. Così facendo stai dicendo al tuo browser che va bene connettersi direttamente al server privato. Chiudi la pagina e torna qui.</p>
+                <p id="OnlineTestLocalServer"><b>Un ultimo passo prima di iniziare, se stai facendo il test online</b>, apri <a target="_blank" href="https://phishing-server-uniba-pasquale.loca.lt">questo link</a> e clicca sul tasto blu <b>Click to Continue</b>. Non ti preoccupare dell'errore. Così facendo stai dicendo al tuo browser che va bene connettersi direttamente al server privato. Chiudi la pagina e torna qui.</p>
                 <ul>
                     <li>Il seguente test va fatto una sola volta e tutto in una seduta. Se chiuderai la pagina dovrai ricominciare da capo. Il test prenderà circa 10 minuti del tuo tempo</li>
                     <li>Svolgi questo test preferibilmente da un PC</li>

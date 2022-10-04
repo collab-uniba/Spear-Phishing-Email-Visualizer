@@ -18,6 +18,8 @@ const TestHandler = (props) => {
 
     const [consciousness, setConsciousness] = useState(0);
 
+    // PER CAPIRE, VISITARE: https://ipip.ori.org/MiniIPIPKey.htm
+
     function addA(val) {
         setAgreebleness(agreebleness + parseInt(val));
     }

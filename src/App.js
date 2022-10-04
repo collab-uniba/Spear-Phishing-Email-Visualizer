@@ -26,6 +26,7 @@ function App() {
     setAllEmails([]);
   }
 
+  // SCARICA TUTTE LE EMAIL DATO UN INDIRIZZO
   const getEmails = (userMail) => {
     emptyEmails();
     fetch(`https://phishing-server-uniba-pasquale.loca.lt/api/emails/${userMail}`, 
@@ -45,6 +46,7 @@ function App() {
       .catch(() => alert("Nessuna mail trovata nel DB"));
   }
 
+  // MISCHIA LE EMAIL
   const shuffle = (arr) => {
     var array = arr;
     
@@ -60,6 +62,7 @@ function App() {
     return array;
   }
 
+  // INIZIALIZZA IL TEST
   const initialize = (userData) => {
     setUser(userData);
     getEmails(userData.email);
@@ -67,22 +70,22 @@ function App() {
     setLogged(true);
   }
 
-
+  // AUMENTA L'INDICE DEL VETTORE EMAIL
   const increaseIdx = () => {
     if (selectedEmlIdx >= allEmails.length - 1){
       setFinished(true);
       return
     } 
-    
     setSelectedEmlIdx(idx => idx + 1);
   }
-
+ 
+  // DIMINUISCE L'INDICE, SOLO DI DEBUG
   const decreaseIdx = () => {
     if (selectedEmlIdx <= 0) return
-
     setSelectedEmlIdx(idx => idx - 1);
   }
 
+  // SEGNA LA MAIL COME GIUDICATA LEGITTIMA
   const evalLegit = () => {
     fetch(`https://phishing-server-uniba-pasquale.loca.lt/api/eval`, {
       method: 'POST',
@@ -97,7 +100,8 @@ function App() {
     .then((data)=> {console.log("Success: ", data)})
     .catch(err => console.log("Errore nel caricamento: ", err));
   }
-
+  
+  // SEGNA LA MAIL COME GIUDICATA PHISHING
   const evalPhish = () => {
     fetch(`https://phishing-server-uniba-pasquale.loca.lt/api/eval`, {
       method: 'POST',
@@ -113,11 +117,13 @@ function App() {
     .catch(err => console.log("Errore nel caricamento: ", err));
   }
 
+  // FUNZIONE TASTO SINISTRO
   const leftClick = () => {
     evalLegit();
     increaseIdx();
   }
 
+  // FUNZIONE TASTO DESTRO
   const rightClick = () => {
     evalPhish();
     increaseIdx();
@@ -132,6 +138,7 @@ function App() {
   })
   console.log("<<<<<<<<<<<<<")
 
+  // TASTI DI DEBUG, AGGIUNGERE SOTTO BOTTOMAREA
   //<Button text="Go Back" onClickFunc={decreaseIdx}/>
   //<Button text="Go Ahead" onClickFunc={increaseIdx}/> 
 
